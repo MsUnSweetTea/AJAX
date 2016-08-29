@@ -1,14 +1,54 @@
-$(document).ready(function(){
 
 $(function(){
+	$('#search-term').submit(function(event){
+		event.preventDefault();
+		var searchTerm = $('#query').val();
+		getRequest(searchTerm);
+		});
+	});
 
-  $.getJSON('http://www.omdbapi.com/?s=Star%20Wars&r=json', function(data){
-    var myData = data.Search;
+function getRequest(searchTerm){
+	var params = {
+		s: searchTerm,
+		r: 'json'
+	};
+	url = 'http://www.omdbapi.com';
+	$.getJSON(url + params + function(data){
+		showResults(data.Search);
+	});
+};
 
-    $.each(myData, function(index, value){ //index represents the element being looped, and value represents the property
-    	console.log(value.Title);
-    })
-    console.log(myData);
-    // console.log(myData[9]['Title']);
+function showResults(results) {
+	var html = "";
+	$.each(results, function(index, value) {
+		html += '<p>' + value.Title + '</p>';
+		console.log(value.Title)
+	});
+	$('#search-results').html(html);
+};
+
+
+
+/*
+$(function(){
+  $('#search-term').submit(function(event){
+    event.preventDefault();
+    var searchTerm = $('#query').val();
+    getRequest(searchTerm);
+  });
 });
-});
+
+function getRequest(searchTerm){
+  $.getJSON('http://www.omdbapi.com/?s=' + searchTerm + '&r=json', function(data){
+    showResults(data.Search);
+  });
+}
+
+function showResults(results){
+  var html = "";
+  $.each(results, function(index,value){
+    html += '<p>' + value.Title + '</p>';
+    console.log(value.Title);
+  });
+  $('#search-results').html(html);
+}*/
